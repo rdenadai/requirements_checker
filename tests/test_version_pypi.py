@@ -1,9 +1,9 @@
 import pytest
 
 try:
-    from test_python.pypi.version_pypi import PyPiVersion
+    from requirements_checker.pypi.version_pypi import PyPiVersion
 except ModuleNotFoundError as mnfe:
-    from ..test_python.pypi.version_pypi import PyPiVersion
+    from ..requirements_checker.pypi.version_pypi import PyPiVersion
 
 
 @pytest.mark.parametrize(

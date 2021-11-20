@@ -2,11 +2,11 @@ import pytest
 from httpx import AsyncClient
 
 try:
-    from test_python.pypi.search_pypi import search_pypi
-    from test_python.pypi.version_pypi import PyPiVersion
+    from requirements_checker.pypi.search_pypi import search_pypi
+    from requirements_checker.pypi.version_pypi import PyPiVersion
 except ModuleNotFoundError as mnfe:
-    from ..test_python.pypi.search_pypi import search_pypi
-    from ..test_python.pypi.version_pypi import PyPiVersion
+    from ..requirements_checker.pypi.search_pypi import search_pypi
+    from ..requirements_checker.pypi.version_pypi import PyPiVersion
 
 
 @pytest.mark.asyncio
