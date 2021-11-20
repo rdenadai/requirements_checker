@@ -1,12 +1,6 @@
 from httpx import AsyncClient
-
-try:
-    from version_pypi import PyPiVersion
-
-    from ..logger import LOGGER
-except ModuleNotFoundError as mnfe:
-    from ..logger import LOGGER
-    from .version_pypi import PyPiVersion
+from requirements_checker.logger import LOGGER
+from requirements_checker.pypi.version_pypi import PyPiVersion
 
 
 async def search_pypi(async_client: AsyncClient, packaget_name: str) -> PyPiVersion:

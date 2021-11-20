@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import asyncio
+import sys
 from functools import wraps
 
 import click
 
-try:
+sys.path.append(".")
+sys.path.append("..")
 
-    from requirements.load_requirements import get_main_requirements_checked
-except ModuleNotFoundError as mnfe:
-    from .requirements.load_requirements import get_main_requirements_checked
+from requirements_checker.requirements.load_requirements import get_main_requirements_checked
 
 
 # Wrapper need it to run a async fn with click

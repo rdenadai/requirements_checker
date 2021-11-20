@@ -4,15 +4,9 @@ from pathlib import Path
 
 import pkg_resources
 from httpx import AsyncClient
-
-try:
-    from exceptions import RequirementsDoesntExists
-    from pypi.search_pypi import search_pypi
-    from pypi.version_pypi import PyPiVersion
-except ModuleNotFoundError as mnfe:
-    from ..exceptions import RequirementsDoesntExists
-    from ..pypi.search_pypi import search_pypi
-    from ..pypi.version_pypi import PyPiVersion
+from requirements_checker.exceptions import RequirementsDoesntExists
+from requirements_checker.pypi.search_pypi import search_pypi
+from requirements_checker.pypi.version_pypi import PyPiVersion
 
 
 def load_requirements(path: str) -> list:
