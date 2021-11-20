@@ -1,47 +1,42 @@
 from __future__ import annotations
 
 import asyncio
-import json
-import re
+from functools import wraps
 
-from httpx import AsyncClient
+import click
 
 try:
-    from pypi.search_pypi import search_pypi
-    from pypi.version_pypi import PyPiVersion
-    from requirements.load_requirements import load_requirements
+
+    from requirements.load_requirements import get_main_requirements_checked
 except ModuleNotFoundError as mnfe:
-    from .pypi.search_pypi import search_pypi
-    from .pypi.version_pypi import PyPiVersion
-    from .requirements.load_requirements import load_requirements
+    from .requirements.load_requirements import get_main_requirements_checked
 
 
-async def main() -> str:
-    # Load requirements.txt from path
-    requirements = load_requirements("/home/rdenadai/Projetos/test_python/requirements.txt")
-    # Async client to search pypi api
-    async with AsyncClient() as async_client:
-        results = []
-        for requirement in requirements:
-            package, *version = requirement
-            latest_version = await search_pypi(async_client, package)
-            out_of_date = False
-            if version:
-                version = PyPiVersion(version[0])
-                if latest_version > version:
-                    out_of_date = True
-            else:
-                out_of_date = True
-            results.append(
-                {
-                    "packageName": package,
-                    "currentVersion": str(version) if version else "",
-                    "latestVersion": str(latest_version),
-                    "outOfDate": out_of_date,
-                }
-            )
-    return json.dumps(results)
+# Wrapper need it to run a async fn with click
+def coro(fn):
+    @wraps(fn)
+    def wrapper(*args, **kwargs):
+        return asyncio.run(fn(*args, **kwargs))
+
+    return wrapper
+
+
+@click.command()
+@click.option(
+    "--path",
+    default="requirements.txt",
+    prompt="Path to requirements.txt",
+    help="Set the full system path to the requirements.txt file to be analyse.",
+)
+@coro
+async def main(path: str) -> None:
+    """Main function to run
+
+    Args:
+        path (str): The full system path to the requirements.txt to be analyze
+    """
+    print(await get_main_requirements_checked(path))
 
 
 if __name__ == "__main__":
-    print(asyncio.run(main()))
+    main()

@@ -8,10 +8,11 @@ from functools import total_ordering
 class PyPiVersion:
     """Class build based on PEP 440 (https://www.python.org/dev/peps/pep-0440/)"""
 
+    # There are some crazy versions numbers that uses - (slash) to separate
     suffix_pattern = re.compile(
-        r"(a[0-9]+)|(b[0-9]+)|(c[0-9]+)|(rc[0-9]+)|(\.dev[0-9]+)|(\.post[0-9]+)"
+        r"(a[0-9]+)|(b[0-9]*)|(c[0-9]*)|(rc[0-9]*)|(\.dev[0-9]*)|(\.post[0-9]*)|(-[0-9]*)"
     )
-    suffix_pattern_number = re.compile(r"(a)|(b)|(c)|(rc)|(\.dev)|(\.post)")
+    suffix_pattern_number = re.compile(r"(a)|(b)|(c)|(rc)|(\.dev)|(\.post)|(-)")
 
     def __init__(self, version: str) -> None:
         self.__version_str = version

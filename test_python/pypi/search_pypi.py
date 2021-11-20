@@ -23,9 +23,14 @@ async def search_pypi(async_client: AsyncClient, packaget_name: str) -> PyPiVers
     try:
         r = await async_client.get(f"https://pypi.org/pypi/{packaget_name}/json")
         if r.status_code == 200:
-            versions = [PyPiVersion(version) for version in list(r.json()["releases"].keys())]
-            versions.sort()
-            latest_version = versions[-1]
+            # In case we need to check all previous version ... enable this block
+            # ---------
+            # versions = [PyPiVersion(version) for version in list(r.json()["releases"].keys())]
+            # versions.sort()
+            # latest_version = versions[-1]
+            # ---------
+            # Latest release only
+            latest_version = PyPiVersion(str(r.json()["info"]["version"]))
     except Exception as e:
         LOGGER.error(f"ERROR: Checking the pypi API for |{packaget_name}| => {str(e)}")
     return latest_version
